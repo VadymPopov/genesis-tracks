@@ -17,9 +17,10 @@ export type Meta = {
 };
 
 export type TracksQuery = {
-  page?: number;
+  page: string;
   sort?: string;
   order?: string;
   search?: string;
   artist?: string;
+  genre?: string;
 };

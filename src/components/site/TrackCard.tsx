@@ -5,7 +5,6 @@ import { CirclePlus, FileUp, Pencil, Trash2 } from 'lucide-react';
 
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { Track } from './TracksList';
 
 import {
   Card,
@@ -15,12 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Track } from '@/types';
 
 export default function TrackCard({ track }: { track: Track }) {
   return (
     <Card className="relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl">
       <div className="absolute top-5 right-5 flex gap-2">
-        {track.genres.map((genre) => (
+        {track.genres.map((genre: string) => (
           <Badge key={genre} variant="secondary">
             {genre}
           </Badge>

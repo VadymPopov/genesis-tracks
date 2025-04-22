@@ -1,19 +1,22 @@
 import TracksList from '../components/site/TracksList';
 
+import FilterSelect from '@/components/site/FilterSelect';
 import SortSelect from '@/components/site/SortSelect';
 import TracksPagination from '@/components/site/TracksPagination';
 import { getTracks } from '@/lib/getTracks';
 
 type Params = Promise<{
-  page?: number;
+  page: string;
   sort?: string;
   order?: 'asc' | 'desc';
   search?: string;
   artist?: string;
+  genre?: string;
 }>;
 
 export default async function Home({ searchParams }: { searchParams: Params }) {
-  const query = await searchParams;
+  const params = await searchParams;
+  const query = { ...params, page: params.page || '1' };
   const initialData = await getTracks(query);
 
   return (
@@ -24,6 +27,7 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
       </header>
       <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
         <SortSelect />
+        <FilterSelect />
         <TracksList initialData={initialData} query={query} />
         <TracksPagination meta={initialData.meta} />
       </main>

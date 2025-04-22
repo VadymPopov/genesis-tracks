@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import {
   Pagination,
@@ -16,15 +17,21 @@ type TracksPaginationProps = {
 };
 
 export default function TracksPagination({ meta }: TracksPaginationProps) {
-  const [currentPage, setCurrentPage] = useState(meta.page);
+  const searchParams = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+
+  const createPageLink = (page: number) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('page', page.toString());
+    return `?${newParams.toString()}`;
+  };
 
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={`?page=${currentPage - 1}`}
-            onClick={() => setCurrentPage(currentPage - 1)}
+            href={createPageLink(currentPage - 1)}
             disabled={currentPage === 1}
           />
         </PaginationItem>
@@ -33,9 +40,8 @@ export default function TracksPagination({ meta }: TracksPaginationProps) {
           return (
             <PaginationItem key={pageNumber}>
               <PaginationLink
-                href={`?page=${pageNumber}`}
+                href={createPageLink(pageNumber)}
                 isActive={currentPage === pageNumber}
-                onClick={() => setCurrentPage(pageNumber)}
               >
                 {pageNumber}
               </PaginationLink>
@@ -47,8 +53,7 @@ export default function TracksPagination({ meta }: TracksPaginationProps) {
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
-            href={`?page=${currentPage + 1}`}
-            onClick={() => setCurrentPage(currentPage + 1)}
+            href={createPageLink(currentPage + 1)}
             disabled={currentPage === meta.totalPages}
           />
         </PaginationItem>
