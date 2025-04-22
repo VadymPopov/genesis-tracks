@@ -1,26 +1,32 @@
+'use client';
 import React from 'react';
 
 import TrackCard from './TrackCard';
 
-export type Track = {
-  id: string;
-  title: string;
-  artist: string;
-  album: string;
-  genres: string[];
-  slug: string;
-  coverImage: string;
-  audioFile: string;
-};
+import { useTracks } from '@/hooks/useTracks';
+import { Meta, Track, TracksQuery } from '@/types';
 
 type TracksListProps = {
-  tracks: Track[];
+  initialData: { data: Track[]; meta: Meta };
+  query: TracksQuery;
 };
 
-export default function TracksList({ tracks }: TracksListProps) {
+export default function TracksList({ initialData, query }: TracksListProps) {
+  const { tracks, isLoading, error } = useTracks({
+    fallbackData: initialData,
+    query,
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
   return (
     <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {tracks.map((track) => (
+      {tracks?.data.map((track) => (
         <li key={track.id} className="text-black">
           <TrackCard track={track} />
         </li>

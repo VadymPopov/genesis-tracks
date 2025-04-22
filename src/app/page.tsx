@@ -1,10 +1,20 @@
 import TracksList from '../components/site/TracksList';
 
+import SortSelect from '@/components/site/SortSelect';
 import TracksPagination from '@/components/site/TracksPagination';
+import { getTracks } from '@/lib/getTracks';
 
-export default async function Home() {
-  const data = await fetch('http://localhost:8000/api/tracks');
-  const tracks = await data.json();
+type Params = Promise<{
+  page?: number;
+  sort?: string;
+  order?: 'asc' | 'desc';
+  search?: string;
+  artist?: string;
+}>;
+
+export default async function Home({ searchParams }: { searchParams: Params }) {
+  const query = await searchParams;
+  const initialData = await getTracks(query);
 
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
@@ -13,8 +23,9 @@ export default async function Home() {
         <p>Music Tracks App</p>
       </header>
       <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        {tracks.data && <TracksList tracks={tracks.data} />}
-        <TracksPagination meta={tracks.meta} />
+        <SortSelect />
+        <TracksList initialData={initialData} query={query} />
+        <TracksPagination meta={initialData.meta} />
       </main>
       <footer className="row-start-3 flex items-center justify-center">
         <a
