@@ -1,6 +1,7 @@
 import TracksList from '../components/site/TracksList';
 
 import FilterSelect from '@/components/site/FilterSelect';
+import SearchBar from '@/components/site/SearchBar';
 import SortSelect from '@/components/site/SortSelect';
 import TracksPagination from '@/components/site/TracksPagination';
 import { getTracks } from '@/lib/getTracks';
@@ -26,8 +27,16 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
         <p>Music Tracks App</p>
       </header>
       <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        <SortSelect />
-        <FilterSelect />
+        <div className="flex w-full justify-between">
+          <div className="flex gap-4">
+            <SortSelect />
+            <FilterSelect />
+          </div>
+          <div>
+            <SearchBar />
+          </div>
+        </div>
+
         <TracksList initialData={initialData} query={query} />
         <TracksPagination meta={initialData.meta} />
       </main>
