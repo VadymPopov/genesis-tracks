@@ -127,7 +127,7 @@ export function useTracks({
       const axiosError = error as AxiosError<{ error: string }>;
 
       console.error(
-        'Error updating a track:',
+        'Error deleting a track:',
         axiosError?.response?.data?.error,
       );
 

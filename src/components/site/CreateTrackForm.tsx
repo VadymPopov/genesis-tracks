@@ -52,7 +52,7 @@ export const formSchema = z.object({
     .or(z.literal('')),
 });
 
-export function CreateTrackForm({
+export default function CreateTrackForm({
   onDialogClose,
 }: {
   onDialogClose: () => void;

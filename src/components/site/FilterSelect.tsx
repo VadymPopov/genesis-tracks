@@ -44,7 +44,7 @@ export default function FilterSelect() {
       onValueChange={handleGenreChange}
       value={selectedValue}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full sm:w-[180px]">
         <SelectValue placeholder="Genre" />
       </SelectTrigger>
       <SelectContent>

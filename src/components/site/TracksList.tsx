@@ -17,22 +17,22 @@ export default function TracksList({ initialData, query }: TracksListProps) {
     query,
   });
 
-  console.log(tracks);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>{error.message}</p>;
-  }
   return (
-    <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {tracks?.data.map((track) => (
-        <li key={track.id} className="text-black">
-          <TrackCard track={track} />
-        </li>
-      ))}
-    </ul>
+    <div className="flex min-h-screen w-full flex-col items-center justify-center">
+      {isLoading && <p className="text-center text-gray-500">Loading...</p>}
+      {error && <p className="text-center text-red-500">{error.message}</p>}
+      {!isLoading && !error && !tracks?.data.length && (
+        <p className="text-center text-2xl text-gray-500">No tracks found.</p>
+      )}
+      {!isLoading && !error && tracks?.data.length > 0 && (
+        <ul className="grid w-full [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] gap-5">
+          {tracks.data.map((track) => (
+            <li key={track.id} className="w-full text-black">
+              <TrackCard track={track} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

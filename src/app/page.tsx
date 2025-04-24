@@ -27,15 +27,15 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
         <p>Logo is here</p>
         <p>Music Tracks App</p>
       </header>
-      <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        <div className="flex w-full justify-between">
-          <div className="flex gap-4">
+      <main className="row-start-2 flex w-full flex-col items-center gap-[32px] sm:items-start">
+        <div className="flex w-full flex-col justify-between gap-4 sm:flex-row">
+          <div className="flex justify-between gap-4">
             <SortSelect />
             <FilterSelect />
           </div>
-          <div className="flex gap-4">
-            <CreateModal />
+          <div className="flex flex-col justify-between gap-4">
             <SearchBar />
+            <CreateModal />
           </div>
         </div>
 

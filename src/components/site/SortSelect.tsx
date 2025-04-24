@@ -46,7 +46,7 @@ export default function SortSelect() {
       onValueChange={handleSortChange}
       value={selectedValue}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full sm:w-[180px]">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent>

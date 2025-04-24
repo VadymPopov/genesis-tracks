@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { CirclePlus } from 'lucide-react';
 
-import { CreateTrackForm } from './CreateTrackForm';
+import CreateTrackForm from './CreateTrackForm';
 
 import { Button } from '@/components/ui/button';
 import {

@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { FileUp } from 'lucide-react';
-
 import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
+import AudioPlayer from './AudioPlayer';
+import DeleteModal from './DeleteModal';
 import EditTrackModal from './EditTrackModal';
+import UploadTrackModal from './UploadAudioModal';
 
 import {
   Card,
@@ -15,10 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useTracks } from '@/hooks/useTracks';
 import { Track } from '@/types';
-import DeleteTrackModal from './DeleteTrackModal';
+import { useExclusiveAudio } from '@/hooks/useAudioPlayer';
 
 export default function TrackCard({ track }: { track: Track }) {
+  const { deleteTrack } = useTracks({});
+  const audioRef = useExclusiveAudio();
+
   return (
     <Card className="relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl">
       <div className="absolute top-5 right-5 flex gap-2">
@@ -47,19 +51,27 @@ export default function TrackCard({ track }: { track: Track }) {
           Album: <span className="text-black">{track.album ?? 'N/A'}</span>
         </CardDescription>
       </CardContent>
-      <CardFooter className="flex gap-4">
-        <audio controls>
-          <source src={track.audioFile} type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
-
-        <EditTrackModal track={track} />
-
-        <Button>
-          <FileUp />
-        </Button>
-
-        <DeleteTrackModal track={track} />
+      <CardFooter className="flex flex-col gap-4">
+        {track.audioFile && (
+          <audio controls className="w-full" ref={audioRef}>
+            <source
+              src={`http://localhost:8000/api/files/${track.audioFile}`}
+              type="audio/mp3"
+            />
+            Your browser does not support the audio element.
+          </audio>
+        )}
+        <div className="flex gap-2 self-end">
+          <EditTrackModal track={track} />
+          <UploadTrackModal track={track} />
+          <DeleteModal
+            title="Delete Track"
+            track={track}
+            deleteFn={deleteTrack}
+            errorMsg="Failed to delete track"
+            successMsg={`${track.title} by ${track.artist} was successfully deleted!`}
+          />
+        </div>
       </CardFooter>
     </Card>
   );

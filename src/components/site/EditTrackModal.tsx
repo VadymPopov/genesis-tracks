@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { Pencil } from 'lucide-react';
 
-import { EditTrackForm } from './EditTrackForm';
+import EditTrackForm from './EditTrackForm';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -33,7 +33,7 @@ export default function EditTrackModal({ track }: { track: Track }) {
         <DialogHeader>
           <DialogTitle>Edit Track</DialogTitle>
           <DialogDescription>
-            Make changes to the track details and click &apos;Submit&apos;.
+            Make changes to the track details and click &apos;Save&apos;.
           </DialogDescription>
         </DialogHeader>
         <EditTrackForm track={track} onDialogClose={onDialogClose} />

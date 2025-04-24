@@ -26,6 +26,10 @@ export default function TracksPagination({ meta }: TracksPaginationProps) {
     return `?${newParams.toString()}`;
   };
 
+  if (!meta || meta.totalPages <= 1) {
+    return null;
+  }
+
   return (
     <Pagination>
       <PaginationContent>

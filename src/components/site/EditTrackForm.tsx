@@ -53,7 +53,7 @@ export const formSchema = z.object({
     .or(z.literal('')),
 });
 
-export function EditTrackForm({
+export default function EditTrackForm({
   track,
   onDialogClose,
 }: {
@@ -182,10 +182,10 @@ export function EditTrackForm({
             {isSubmitting ? (
               <>
                 <Loader2 className="animate-spin" />
-                Submitting
+                Saving
               </>
             ) : (
-              'Submit'
+              'Save'
             )}
           </>
         </Button>
