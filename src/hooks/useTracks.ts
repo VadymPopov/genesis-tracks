@@ -6,6 +6,8 @@ export type TracksResponse = {
   meta: Meta;
 };
 
+import { AxiosError } from 'axios';
+
 import {
   deleteFetcher,
   getFetcher,
@@ -55,9 +57,82 @@ export function useTracks({
       await postFetcher('/api/tracks', track);
       mutate();
     } catch (error) {
-      console.error('Error adding new track:', error?.response?.data?.error);
+      const axiosError = error as AxiosError<{ error: string }>;
+
+      console.error(
+        'Error adding new track:',
+        axiosError?.response?.data?.error,
+      );
+
       const message =
-        error?.response?.data?.error || 'An unexpected error occurred.';
+        axiosError?.response?.data?.error || 'An unexpected error occurred.';
+      throw new Error(message);
+    }
+  };
+
+  const editTrack = async (updatedTrack: Track) => {
+    try {
+      handleOptimisticMutate(mutate, (cachedData) =>
+        cachedData
+          ? {
+              ...cachedData,
+              data: cachedData.data.map((t) =>
+                t.id === updatedTrack.id ? { ...t, ...updatedTrack } : t,
+              ),
+            }
+          : {
+              data: [updatedTrack],
+              meta: { limit: 0, page: 0, total: 1, totalPages: 1 },
+            },
+      );
+      await putFetcher(`/api/tracks/${updatedTrack.id}`, updatedTrack);
+      mutate((cachedData) => {
+        if (!cachedData) return cachedData;
+        return {
+          ...cachedData,
+          data: cachedData.data.map((t) =>
+            t.id === updatedTrack.id ? updatedTrack : t,
+          ),
+        };
+      });
+    } catch (error) {
+      const axiosError = error as AxiosError<{ error: string }>;
+
+      console.error(
+        'Error updating a track:',
+        axiosError?.response?.data?.error,
+      );
+
+      const message =
+        axiosError?.response?.data?.error || 'An unexpected error occurred.';
+      throw new Error(message);
+    }
+  };
+
+  const deleteTrack = async (id: string) => {
+    const tracksApiUrl = `/api/tracks/${id}`;
+    try {
+      handleOptimisticMutate(mutate, (cachedData) => ({
+        data: cachedData?.data?.filter((track) => track.id !== id) || [],
+        meta: cachedData?.meta || {
+          limit: 0,
+          page: 0,
+          total: 1,
+          totalPages: 1,
+        },
+      }));
+      await deleteFetcher(tracksApiUrl);
+      mutate();
+    } catch (error) {
+      const axiosError = error as AxiosError<{ error: string }>;
+
+      console.error(
+        'Error updating a track:',
+        axiosError?.response?.data?.error,
+      );
+
+      const message =
+        axiosError?.response?.data?.error || 'An unexpected error occurred.';
       throw new Error(message);
     }
   };
@@ -70,5 +145,7 @@ export function useTracks({
     isLoading,
     error,
     addTrack,
+    editTrack,
+    deleteTrack,
   };
 }

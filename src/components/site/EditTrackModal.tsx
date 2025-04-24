@@ -1,9 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 
-import { CirclePlus } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 
-import { CreateTrackForm } from './CreateTrackForm';
+import { EditTrackForm } from './EditTrackForm';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -14,8 +14,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Track } from '@/types';
 
-export default function CreateTrackModal() {
+export default function EditTrackModal({ track }: { track: Track }) {
   const [isOpen, setIsOpen] = useState(false);
   const onDialogClose = () => {
     setIsOpen(false);
@@ -24,20 +25,18 @@ export default function CreateTrackModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="cursor-pointer">
-          <CirclePlus />
-          Create Track
+        <Button className="cursor-pointer">
+          <Pencil />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Track</DialogTitle>
+          <DialogTitle>Edit Track</DialogTitle>
           <DialogDescription>
-            Enter your favorite track&apos;s details below, then click
-            &apos;Submit&apos;.
+            Make changes to the track details and click &apos;Submit&apos;.
           </DialogDescription>
         </DialogHeader>
-        <CreateTrackForm onDialogClose={onDialogClose} />
+        <EditTrackForm track={track} onDialogClose={onDialogClose} />
       </DialogContent>
     </Dialog>
   );

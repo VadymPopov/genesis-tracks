@@ -1,10 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { FileUp, Pencil, Trash2 } from 'lucide-react';
+import { FileUp } from 'lucide-react';
 
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
+import EditTrackModal from './EditTrackModal';
 
 import {
   Card,
@@ -14,13 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Track } from '@/types';
+import DeleteTrackModal from './DeleteTrackModal';
 
 export default function TrackCard({ track }: { track: Track }) {
   return (
@@ -57,40 +53,13 @@ export default function TrackCard({ track }: { track: Track }) {
           Your browser does not support the audio element.
         </audio>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button>
-                <Pencil />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Edit a track</p>
-            </TooltipContent>
-          </Tooltip>
+        <EditTrackModal track={track} />
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button>
-                <FileUp />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Upload an audio</p>
-            </TooltipContent>
-          </Tooltip>
+        <Button>
+          <FileUp />
+        </Button>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button>
-                <Trash2 />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Delete a track</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <DeleteTrackModal track={track} />
       </CardFooter>
     </Card>
   );

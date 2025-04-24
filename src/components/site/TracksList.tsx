@@ -17,6 +17,8 @@ export default function TracksList({ initialData, query }: TracksListProps) {
     query,
   });
 
+  console.log(tracks);
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
