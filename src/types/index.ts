@@ -2,11 +2,11 @@ export type Track = {
   id: string;
   title: string;
   artist: string;
-  album: string;
+  album?: string;
   genres: string[];
   slug: string;
-  coverImage: string;
-  audioFile: string;
+  coverImage?: string;
+  audioFile?: string;
 };
 
 export type Meta = {

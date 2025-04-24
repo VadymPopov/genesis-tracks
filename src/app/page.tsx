@@ -1,5 +1,6 @@
 import TracksList from '../components/site/TracksList';
 
+import CreateModal from '@/components/site/CreateTrackModal';
 import FilterSelect from '@/components/site/FilterSelect';
 import SearchBar from '@/components/site/SearchBar';
 import SortSelect from '@/components/site/SortSelect';
@@ -32,7 +33,8 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
             <SortSelect />
             <FilterSelect />
           </div>
-          <div>
+          <div className="flex gap-4">
+            <CreateModal />
             <SearchBar />
           </div>
         </div>

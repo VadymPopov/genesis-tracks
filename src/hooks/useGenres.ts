@@ -13,7 +13,6 @@ export function useGenres() {
     getFetcher,
     {
       revalidateIfStale: true,
-      revalidateOnMount: true,
     },
   );
 

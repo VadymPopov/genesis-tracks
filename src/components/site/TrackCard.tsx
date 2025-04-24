@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { CirclePlus, FileUp, Pencil, Trash2 } from 'lucide-react';
+import { FileUp, Pencil, Trash2 } from 'lucide-react';
 
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -14,6 +14,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Track } from '@/types';
 
 export default function TrackCard({ track }: { track: Track }) {
@@ -33,7 +39,7 @@ export default function TrackCard({ track }: { track: Track }) {
           alt={track.title}
           width={400}
           height={300}
-          className="w-full object-cover"
+          className="max-h-[300px] w-full object-cover"
         />
       </CardHeader>
       <CardContent className="mt-4">
@@ -50,12 +56,41 @@ export default function TrackCard({ track }: { track: Track }) {
           <source src={track.audioFile} type="audio/mp3" />
           Your browser does not support the audio element.
         </audio>
-        <Button>
-          <Pencil />
-        </Button>
-        <Button>
-          <Trash2 />
-        </Button>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button>
+                <Pencil />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit a track</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button>
+                <FileUp />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Upload an audio</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button>
+                <Trash2 />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Delete a track</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </CardFooter>
     </Card>
   );
