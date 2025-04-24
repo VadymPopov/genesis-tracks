@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 
+import Loader from './Loader';
 import TrackCard from './TrackCard';
 
 import { useTracks } from '@/hooks/useTracks';
@@ -19,7 +20,7 @@ export default function TracksList({ initialData, query }: TracksListProps) {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center">
-      {isLoading && <p className="text-center text-gray-500">Loading...</p>}
+      {isLoading && <Loader />}
       {error && <p className="text-center text-red-500">{error.message}</p>}
       {!isLoading && !error && !tracks?.data.length && (
         <p className="text-center text-2xl text-gray-500">No tracks found.</p>

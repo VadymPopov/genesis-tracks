@@ -1,4 +1,6 @@
-import TracksList from '../components/site/TracksList';
+import Image from 'next/image';
+
+import TracksList from '../../components/site/TracksList';
 
 import CreateModal from '@/components/site/CreateTrackModal';
 import FilterSelect from '@/components/site/FilterSelect';
@@ -23,9 +25,9 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
 
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <header className="row-start-1 flex gap-5">
-        <p>Logo is here</p>
-        <p>Music Tracks App</p>
+      <header className="row-start-1 flex items-center justify-center gap-5">
+        <Image src="/logo.svg" alt="Audio Wave Icon" width={64} height={64} />
+        <h1 className="text-2xl font-semibold">Music Tracks App</h1>
       </header>
       <main className="row-start-2 flex w-full flex-col items-center gap-[32px] sm:items-start">
         <div className="flex w-full flex-col justify-between gap-4 sm:flex-row">
