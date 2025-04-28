@@ -17,6 +17,7 @@ import {
 import { Track } from '@/types';
 
 type DeleteModalProps = {
+  isTrack?: boolean;
   title: string;
   track: Track;
   deleteFn: (id: string) => Promise<void>;
@@ -25,6 +26,7 @@ type DeleteModalProps = {
 };
 
 export default function DeleteModal({
+  isTrack,
   title,
   track,
   deleteFn,
@@ -55,7 +57,10 @@ export default function DeleteModal({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="cursor-pointer">
+        <Button
+          className="cursor-pointer"
+          data-testid={isTrack ? `delete-track-${track.id}` : ''}
+        >
           <Trash2 />
         </Button>
       </DialogTrigger>

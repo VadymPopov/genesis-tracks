@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import { Badge } from '../ui/badge';
-import AudioPlayer from './AudioPlayer';
 import DeleteModal from './DeleteModal';
 import EditTrackModal from './EditTrackModal';
 import UploadTrackModal from './UploadAudioModal';
@@ -15,16 +14,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useTracks } from '@/hooks/useTracks';
-import { Track } from '@/types';
 import { useExclusiveAudio } from '@/hooks/useAudioPlayer';
+import { useAppContext } from '@/providers';
+import { Track } from '@/types';
 
 export default function TrackCard({ track }: { track: Track }) {
-  const { deleteTrack } = useTracks({});
-  const audioRef = useExclusiveAudio();
-
+  const audioRef = useExclusiveAudio(new Date(track.updatedAt).getTime());
+  const { deleteTrack } = useAppContext();
   return (
-    <Card className="relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl">
+    <Card
+      className="relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl"
+      data-testid={`track-item-${track.id}`}
+    >
       <div className="absolute top-5 right-5 flex gap-2">
         {track.genres.map((genre: string) => (
           <Badge key={genre} variant="secondary">
@@ -43,19 +44,29 @@ export default function TrackCard({ track }: { track: Track }) {
         />
       </CardHeader>
       <CardContent className="mt-4">
-        <CardTitle className="mb-2 text-lg font-semibold">
+        <CardTitle
+          className="mb-2 text-lg font-semibold"
+          data-testid={`track-item-${track.id}-title`}
+        >
           {track.title}
         </CardTitle>
-        <CardDescription>{track.artist}</CardDescription>
+        <CardDescription data-testid={`track-item-${track.id}-artist`}>
+          {track.artist}
+        </CardDescription>
         <CardDescription>
           Album: <span className="text-black">{track.album ?? 'N/A'}</span>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
         {track.audioFile && (
-          <audio controls className="w-full" ref={audioRef}>
+          <audio
+            controls
+            className="w-full"
+            ref={audioRef}
+            data-testid={`audio-player-${track.id}`}
+          >
             <source
-              src={`http://localhost:8000/api/files/${track.audioFile}`}
+              src={`http://localhost:8000/api/files/${track.audioFile}?updatedAt=${new Date(track.updatedAt).getTime()}`}
               type="audio/mp3"
             />
             Your browser does not support the audio element.
@@ -70,6 +81,7 @@ export default function TrackCard({ track }: { track: Track }) {
             deleteFn={deleteTrack}
             errorMsg="Failed to delete track"
             successMsg={`${track.title} by ${track.artist} was successfully deleted!`}
+            isTrack={true}
           />
         </div>
       </CardFooter>

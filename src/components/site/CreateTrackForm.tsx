@@ -20,8 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useGenres } from '@/hooks/useGenres';
-import { useTracks } from '@/hooks/useTracks';
+import { useAppContext } from '@/providers';
 
 export const formSchema = z.object({
   title: z
@@ -57,9 +56,7 @@ export default function CreateTrackForm({
 }: {
   onDialogClose: () => void;
 }) {
-  const { genres } = useGenres();
-  const { addTrack } = useTracks({});
-  const genreList = genres.map((genre) => ({ value: genre, label: genre }));
+  const { addTrack, genreList } = useAppContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -99,7 +96,11 @@ export default function CreateTrackForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8"
+        data-testid="track-form"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -107,9 +108,13 @@ export default function CreateTrackForm({
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the title" {...field} />
+                <Input
+                  placeholder="Enter the title"
+                  {...field}
+                  data-testid="input-title"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-title" />
             </FormItem>
           )}
         />
@@ -120,9 +125,13 @@ export default function CreateTrackForm({
             <FormItem>
               <FormLabel>Artist</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the artist name" {...field} />
+                <Input
+                  placeholder="Enter the artist name"
+                  {...field}
+                  data-testid="input-artist"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-artist" />
             </FormItem>
           )}
         />
@@ -133,9 +142,13 @@ export default function CreateTrackForm({
             <FormItem>
               <FormLabel>Album</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the album name" {...field} />
+                <Input
+                  placeholder="Enter the album name"
+                  {...field}
+                  data-testid="input-album"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-album" />
             </FormItem>
           )}
         />
@@ -153,9 +166,10 @@ export default function CreateTrackForm({
                   placeholder="Select genres"
                   variant="inverted"
                   maxCount={5}
+                  data-testid="genre-selector"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-genre" />
             </FormItem>
           )}
         />
@@ -166,13 +180,22 @@ export default function CreateTrackForm({
             <FormItem>
               <FormLabel>Cover Image Link</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the cover image link" {...field} />
+                <Input
+                  placeholder="Enter the cover image link"
+                  {...field}
+                  data-testid="input-cover-image"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-testid="error-cover-image" />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          data-testid="submit-button"
+          aria-disabled={isSubmitting}
+        >
           <>
             {isSubmitting ? (
               <>

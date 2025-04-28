@@ -7,6 +7,7 @@ export const handleOptimisticMutate = <T>(
   return mutate(updateFn, {
     optimisticData: (currentData) => updateFn(currentData) as T,
     rollbackOnError: true,
+    populateCache: true,
     revalidate: false,
   });
 };

@@ -14,13 +14,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useTracks } from '@/hooks/useTracks';
+import { useAppContext } from '@/providers';
 import { Track } from '@/types';
 
 export default function DeleteTrackModal({ track }: { track: Track }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { deleteTrack } = useTracks({});
+  const { deleteTrack } = useAppContext();
 
   const onDialogClose = () => {
     setIsOpen(false);

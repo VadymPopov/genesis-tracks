@@ -12,14 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useGenres } from '@/hooks/useGenres';
 import { useUpdateQueryParams } from '@/hooks/useUpdateQueryParams';
+import { useAppContext } from '@/providers';
 
 export default function FilterSelect() {
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
   const genre = searchParams.get('genre') || '';
-  const { genres } = useGenres();
+  const { genres } = useAppContext();
   const [selectedValue, setSelectedValue] = useState<string>(genre || '');
 
   const updateQueryParam = useUpdateQueryParams();
@@ -43,6 +43,7 @@ export default function FilterSelect() {
       open={open}
       onValueChange={handleGenreChange}
       value={selectedValue}
+      data-testid="filter-genre"
     >
       <SelectTrigger className="w-full sm:w-[180px]">
         <SelectValue placeholder="Genre" />

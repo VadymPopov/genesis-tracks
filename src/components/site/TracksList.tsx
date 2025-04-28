@@ -4,23 +4,14 @@ import React from 'react';
 import Loader from './Loader';
 import TrackCard from './TrackCard';
 
-import { useTracks } from '@/hooks/useTracks';
-import { Meta, Track, TracksQuery } from '@/types';
+import { useAppContext } from '@/providers';
 
-type TracksListProps = {
-  initialData: { data: Track[]; meta: Meta };
-  query: TracksQuery;
-};
-
-export default function TracksList({ initialData, query }: TracksListProps) {
-  const { tracks, isLoading, error } = useTracks({
-    fallbackData: initialData,
-    query,
-  });
+export default function TracksList() {
+  const { tracks, isLoading, error } = useAppContext();
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center">
-      {isLoading && <Loader />}
+      {isLoading && <Loader testid="loading-tracks" />}
       {error && <p className="text-center text-red-500">{error.message}</p>}
       {!isLoading && !error && !tracks?.data.length && (
         <p className="text-center text-2xl text-gray-500">No tracks found.</p>

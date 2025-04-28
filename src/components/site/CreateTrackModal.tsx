@@ -24,7 +24,11 @@ export default function CreateTrackModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="cursor-pointer">
+        <Button
+          variant="outline"
+          className="cursor-pointer"
+          data-testid="create-track-button"
+        >
           <CirclePlus />
           Create Track
         </Button>

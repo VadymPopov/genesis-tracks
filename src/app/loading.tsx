@@ -2,7 +2,10 @@ import { ScaleLoader } from 'react-spinners';
 
 export default function Loading() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div
+      className="flex h-screen w-screen items-center justify-center"
+      data-testid="loading-indicator"
+    >
       <ScaleLoader
         barCount={10}
         color="#030303"

@@ -15,21 +15,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useAudio } from '@/hooks/useAudio';
+import { stopCurrentAudio } from '@/hooks/useAudioPlayer';
+import { useAppContext } from '@/providers';
 import { Track } from '@/types';
 
-export default function UploadTrackModal({ track }: { track: Track }) {
-  const { deleteAudio } = useAudio();
-
+export default function UploadAudioModal({ track }: { track: Track }) {
+  const { deleteAudio } = useAppContext();
   const [isOpen, setIsOpen] = useState(false);
+
   const onDialogClose = () => {
     setIsOpen(false);
   };
 
+  const onDialogOpen = (open: boolean) => {
+    if (open) {
+      stopCurrentAudio();
+    }
+    setIsOpen(open);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={onDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="cursor-pointer">
+        <Button
+          className="cursor-pointer"
+          data-testid={`upload-track-${track.id}`}
+        >
           <FileUp />
         </Button>
       </DialogTrigger>
@@ -50,7 +61,7 @@ export default function UploadTrackModal({ track }: { track: Track }) {
             <div className="flex items-center gap-2">
               <audio controls>
                 <source
-                  src={`http://localhost:8000/api/files/${track.audioFile}`}
+                  src={`http://localhost:8000/api/files/${track.audioFile}?updatedAt=${new Date(track.updatedAt).getTime()}`}
                   type="audio/mp3"
                 />
                 Your browser does not support the audio element.

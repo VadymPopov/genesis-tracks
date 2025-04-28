@@ -45,6 +45,7 @@ export default function SortSelect() {
       open={open}
       onValueChange={handleSortChange}
       value={selectedValue}
+      data-testid="sort-select"
     >
       <SelectTrigger className="w-full sm:w-[180px]">
         <SelectValue placeholder="Sort By" />

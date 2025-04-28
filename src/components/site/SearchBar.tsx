@@ -43,6 +43,7 @@ export default function SearchBar() {
         onChange={handleSearchChange}
         placeholder="Search"
         className="pr-8 pl-10"
+        data-testid="search-input"
       />
       <Search
         className="absolute top-1/2 left-3 -translate-y-1/2 transform text-gray-400"

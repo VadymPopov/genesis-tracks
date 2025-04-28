@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 let currentlyPlaying: HTMLAudioElement | null = null;
 
-export function useExclusiveAudio() {
+export function useExclusiveAudio(audioSrc?: number) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -26,7 +26,15 @@ export function useExclusiveAudio() {
         currentlyPlaying = null;
       }
     };
-  }, []);
+  }, [audioSrc]);
 
   return audioRef;
+}
+
+export function stopCurrentAudio() {
+  if (currentlyPlaying) {
+    currentlyPlaying.pause();
+    currentlyPlaying.currentTime = 0;
+    currentlyPlaying = null;
+  }
 }

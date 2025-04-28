@@ -11,12 +11,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { useAppContext } from '@/providers';
 
-type TracksPaginationProps = {
-  meta: { limit: number; page: number; total: number; totalPages: number };
-};
-
-export default function TracksPagination({ meta }: TracksPaginationProps) {
+export default function TracksPagination() {
+  const { tracks } = useAppContext();
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
@@ -26,20 +24,21 @@ export default function TracksPagination({ meta }: TracksPaginationProps) {
     return `?${newParams.toString()}`;
   };
 
-  if (!meta || meta.totalPages <= 1) {
+  if (!tracks.meta || tracks.meta.totalPages <= 1) {
     return null;
   }
 
   return (
-    <Pagination>
+    <Pagination data-testid="pagination">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             href={createPageLink(currentPage - 1)}
             disabled={currentPage === 1}
+            data-testid="pagination-prev"
           />
         </PaginationItem>
-        {Array.from({ length: meta.totalPages }, (_, index) => {
+        {Array.from({ length: tracks.meta.totalPages }, (_, index) => {
           const pageNumber = index + 1;
           return (
             <PaginationItem key={pageNumber}>
@@ -58,7 +57,8 @@ export default function TracksPagination({ meta }: TracksPaginationProps) {
         <PaginationItem>
           <PaginationNext
             href={createPageLink(currentPage + 1)}
-            disabled={currentPage === meta.totalPages}
+            disabled={currentPage === tracks.meta.totalPages}
+            data-testid="pagination-next"
           />
         </PaginationItem>
       </PaginationContent>

@@ -1,8 +1,11 @@
 import { ScaleLoader } from 'react-spinners';
 
-export default function Loader() {
+export default function Loader({ testid }: { testid: string }) {
   return (
-    <div className="flex h-screen w-full items-center justify-center">
+    <div
+      className="flex h-screen w-full items-center justify-center"
+      data-testid={testid}
+    >
       <ScaleLoader
         barCount={10}
         color="#030303"

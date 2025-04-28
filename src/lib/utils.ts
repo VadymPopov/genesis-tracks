@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -19,5 +20,10 @@ export function buildQueryParams(query?: TracksQuery) {
   if (query?.search) queryParams.append('search', query.search.toString());
   if (query?.artist) queryParams.append('artist', query.artist.toString());
   if (query?.genre) queryParams.append('genre', query.genre.toString());
-  return queryParams.toString();
+  return queryParams.toString() || undefined;
+}
+
+export function getAxiosErrorMessage(error: unknown) {
+  const axiosError = error as AxiosError<{ error: string }>;
+  return axiosError?.response?.data?.error || 'An unexpected error occurred.';
 }

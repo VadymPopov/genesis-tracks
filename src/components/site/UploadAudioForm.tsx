@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useAudio } from '@/hooks/useAudio';
+import { useAppContext } from '@/providers';
 import { Track } from '@/types';
 
 export const formSchema = z.object({
@@ -39,15 +39,14 @@ export const formSchema = z.object({
     }),
 });
 
-export default function UploadTrackForm({
+export default function UploadAudioForm({
   track,
   onDialogClose,
 }: {
   track: Track;
   onDialogClose: () => void;
 }) {
-  const { uploadAudio } = useAudio();
-
+  const { uploadAudio } = useAppContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,17 +57,19 @@ export default function UploadTrackForm({
     const formData = new FormData();
     formData.append('audioFile', values.audioFile);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     setIsSubmitting(true);
 
     try {
-      await uploadAudio(formData, track.id);
+      await uploadAudio({
+        file: formData,
+        id: track.id,
+        hasExistingAudio: !!track.audioFile,
+      });
       form.reset();
       onDialogClose();
-      toast.success(`${track.title} by ${track.artist} uploaded successfully!`);
+      toast.success(
+        `${track.title} by ${track.artist} ${!!track.audioFile ? 'replaced' : 'uploaded'} successfully!`,
+      );
     } catch (error) {
       console.log(error);
       toast.error(
@@ -105,7 +106,11 @@ export default function UploadTrackForm({
           )}
         />
 
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          aria-disabled={isSubmitting}
+        >
           <>
             {isSubmitting ? (
               <>

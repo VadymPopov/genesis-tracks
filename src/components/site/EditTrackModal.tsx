@@ -25,7 +25,10 @@ export default function EditTrackModal({ track }: { track: Track }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="cursor-pointer">
+        <Button
+          className="cursor-pointer"
+          data-testid={`edit-track-${track.id}`}
+        >
           <Pencil />
         </Button>
       </DialogTrigger>

@@ -20,8 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useGenres } from '@/hooks/useGenres';
-import { useTracks } from '@/hooks/useTracks';
+import { useAppContext } from '@/providers';
 import { Track } from '@/types';
 
 export const formSchema = z.object({
@@ -60,9 +59,7 @@ export default function EditTrackForm({
   track: Track;
   onDialogClose: () => void;
 }) {
-  const { genres } = useGenres();
-  const { editTrack } = useTracks({});
-  const genreList = genres.map((genre) => ({ value: genre, label: genre }));
+  const { editTrack, genreList } = useAppContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
