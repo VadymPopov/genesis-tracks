@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Image from 'next/image';
 
 import clsx from 'clsx';
@@ -21,21 +21,25 @@ import { useAppContext } from '@/providers';
 import { Track } from '@/types';
 
 export default function TrackCard({ track }: { track: Track }) {
-  const audioRef = useExclusiveAudio(new Date(track.updatedAt).getTime());
+  const genres = useMemo(() => track.genres, [track.genres]);
+
+  const { id, title, artist, album, coverImage, audioFile, updatedAt } = track;
+
+  const audioRef = useExclusiveAudio(new Date(updatedAt!).getTime());
   const { deleteTrack, selectedTracks, toggleTrackSelection } = useAppContext();
   return (
     <Card
       className={clsx(
         'relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl',
-        selectedTracks.includes(track.id)
+        selectedTracks.includes(id)
           ? 'border-2 border-blue-400'
           : 'border-2 border-transparent',
       )}
-      data-testid={`track-item-${track.id}`}
-      onClick={() => toggleTrackSelection(track.id)}
+      data-testid={`track-item-${id}`}
+      onClick={() => toggleTrackSelection(id)}
     >
       <div className="absolute top-5 right-5 flex gap-2">
-        {track.genres.map((genre: string) => (
+        {genres.map((genre: string) => (
           <Badge key={genre} variant="secondary">
             {genre}
           </Badge>
@@ -44,8 +48,8 @@ export default function TrackCard({ track }: { track: Track }) {
 
       <CardHeader className="gap-0 p-0">
         <Image
-          src={track.coverImage ?? '/placeholder.jpg'}
-          alt={track.title}
+          src={coverImage ?? '/placeholder.jpg'}
+          alt={title}
           width={400}
           height={300}
           className="max-h-[300px] w-full object-cover"
@@ -54,27 +58,27 @@ export default function TrackCard({ track }: { track: Track }) {
       <CardContent className="mt-4">
         <CardTitle
           className="mb-2 text-lg font-semibold"
-          data-testid={`track-item-${track.id}-title`}
+          data-testid={`track-item-${id}-title`}
         >
-          {track.title}
+          {title}
         </CardTitle>
-        <CardDescription data-testid={`track-item-${track.id}-artist`}>
-          {track.artist}
+        <CardDescription data-testid={`track-item-${id}-artist`}>
+          {artist}
         </CardDescription>
         <CardDescription>
-          Album: <span className="text-black">{track.album ?? 'N/A'}</span>
+          Album: <span className="text-black">{album ?? 'N/A'}</span>
         </CardDescription>
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
-        {track.audioFile && (
+        {audioFile && (
           <audio
             controls
             className="w-full"
             ref={audioRef}
-            data-testid={`audio-player-${track.id}`}
+            data-testid={`audio-player-${id}`}
           >
             <source
-              src={`http://localhost:8000/api/files/${track.audioFile}?updatedAt=${new Date(track.updatedAt).getTime()}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/api/files/${audioFile}?updatedAt=${new Date(updatedAt!).getTime()}`}
               type="audio/mp3"
             />
             Your browser does not support the audio element.
@@ -88,10 +92,10 @@ export default function TrackCard({ track }: { track: Track }) {
           <UploadTrackModal track={track} />
           <DeleteModal
             title="Delete track"
-            description={`Permanently delete track "${track.title}" by ${track.artist}?`}
-            deleteFn={() => deleteTrack(track.id)}
-            successMsg={`${track.title} deleted successfully!`}
-            buttonTestId={`delete-track-${track.id}`}
+            description={`Permanently delete track "${title}" by ${artist}?`}
+            deleteFn={() => deleteTrack(id)}
+            successMsg={`${title} deleted successfully!`}
+            buttonTestId={`delete-track-${id}`}
             errorMsg="Failed to delete track"
           />
         </div>

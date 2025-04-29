@@ -21,35 +21,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAppContext } from '@/providers';
-
-export const formSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .min(2, 'Title must be at least 2 characters')
-    .max(50, 'Title must be at most 50 characters'),
-  artist: z
-    .string()
-    .trim()
-    .min(2, 'Artist must be at least 2 characters')
-    .max(50, 'Artist must be at most 50 characters'),
-  album: z
-    .string()
-    .trim()
-    .min(2, 'Album must be at least 2 characters')
-    .max(50, 'Album must be at most 50 characters')
-    .optional()
-    .or(z.literal('')),
-  genres: z
-    .array(z.string().min(1, 'Genre cannot be empty'))
-    .min(1, 'At least one genre is required')
-    .max(5, 'You can select up to 5 genres'),
-  coverImage: z
-    .string()
-    .url('Cover image must be a valid URL')
-    .optional()
-    .or(z.literal('')),
-});
+import { CreateTrackFormSchema } from '@/schemas';
 
 export default function CreateTrackForm({
   onDialogClose,
@@ -60,30 +32,25 @@ export default function CreateTrackForm({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof CreateTrackFormSchema>>({
+    resolver: zodResolver(CreateTrackFormSchema),
     defaultValues: {
       title: '',
       artist: '',
       album: '',
       genres: [],
-      coverImage: '',
+      coverImage: 'https://www.picsum.photos/id/237/200/300',
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const track = {
-      ...values,
-      coverImage:
-        values.coverImage || 'https://www.picsum.photos/id/237/200/300',
-    };
+  async function onSubmit(values: z.infer<typeof CreateTrackFormSchema>) {
     setIsSubmitting(true);
 
     try {
-      await addTrack(track);
+      await addTrack(values);
       form.reset();
       onDialogClose();
-      toast.success(`${track.title} by ${track.artist} added successfully!`);
+      toast.success(`${values.title} by ${values.artist} added successfully!`);
     } catch (error) {
       console.log(error);
       toast.error(

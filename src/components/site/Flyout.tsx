@@ -9,7 +9,7 @@ import { useAppContext } from '@/providers';
 
 export function Flyout() {
   const { selectedTracks, deleteSelectedTracks } = useAppContext();
-  const message = `${selectedTracks.length} track${selectedTracks.length === 1 ? '' : 's'} selected`;
+  const message = `${selectedTracks.length} track${selectedTracks.length !== 1 ? 's' : ''} selected`;
 
   const handleDelete = async () => {
     try {

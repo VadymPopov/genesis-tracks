@@ -19,25 +19,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAppContext } from '@/providers';
+import { UploadAudioFormSchema } from '@/schemas';
 import { Track } from '@/types';
-
-export const formSchema = z.object({
-  audioFile: z
-    .instanceof(File, { message: 'Audio file is required.' })
-    .refine(
-      (file) =>
-        file.type === 'audio/mpeg' ||
-        file.type === 'audio/wav' ||
-        file.type === 'audio/mp3' ||
-        file.type === 'audio/x-wav',
-      {
-        message: 'File must be an MP3 or WAV file.',
-      },
-    )
-    .refine((file) => file.size <= 10 * 1024 * 1024, {
-      message: 'File size must be less than 10MB.',
-    }),
-});
 
 export default function UploadAudioForm({
   track,
@@ -49,11 +32,11 @@ export default function UploadAudioForm({
   const { uploadAudio } = useAppContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof UploadAudioFormSchema>>({
+    resolver: zodResolver(UploadAudioFormSchema),
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof UploadAudioFormSchema>) {
     const formData = new FormData();
     formData.append('audioFile', values.audioFile);
 
