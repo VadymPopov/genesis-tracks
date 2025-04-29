@@ -120,6 +120,57 @@ export function useTracks({
     }
   };
 
+  const deleteSelectedTracks = async (ids: string[]) => {
+    const tracksApiUrl = '/api/tracks/delete';
+    try {
+      handleOptimisticMutate(mutate, (cachedData) => {
+        if (!cachedData) {
+          return undefined;
+        }
+
+        if (!cachedData.data) {
+          return cachedData;
+        }
+
+        const updatedData = cachedData.data.filter(
+          (track) => !ids.some((id) => track.id === id),
+        );
+        let updatedMeta = cachedData.meta;
+
+        if (cachedData.meta) {
+          updatedMeta = {
+            ...cachedData.meta,
+            total:
+              cachedData.meta.total > ids.length
+                ? cachedData.meta.total - ids.length
+                : 0,
+            totalPages:
+              cachedData.meta.total > ids.length
+                ? Math.ceil(
+                    (cachedData.meta.total - ids.length) /
+                      cachedData.meta.limit,
+                  )
+                : 0,
+          };
+        }
+
+        return {
+          ...cachedData,
+          data: updatedData,
+          meta: updatedMeta,
+        };
+      });
+
+      await postFetcher(tracksApiUrl, { ids });
+    } catch (error) {
+      console.error(
+        'Error deleting selected tracks:',
+        getAxiosErrorMessage(error),
+      );
+      throw new Error(getAxiosErrorMessage(error));
+    }
+  };
+
   return {
     tracks: data || {
       data: [],
@@ -130,5 +181,6 @@ export function useTracks({
     addTrack,
     editTrack,
     deleteTrack,
+    deleteSelectedTracks,
   };
 }

@@ -69,8 +69,8 @@ export default function UploadAudioModal({ track }: { track: Track }) {
 
               <DeleteModal
                 title="Delete Current Audio"
-                track={track}
-                deleteFn={deleteAudio}
+                description={`Permanently delete audio track "${track.title}" by ${track.artist}?`}
+                deleteFn={() => deleteAudio(track.id)}
                 errorMsg="Failed to delete audio"
                 successMsg={`${track.title} audio was successfully deleted!`}
               />

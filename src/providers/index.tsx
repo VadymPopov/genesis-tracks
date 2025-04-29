@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { useAudio } from '@/hooks/useAudio';
 import { useGenres } from '@/hooks/useGenres';
+import { useSelectedTracks } from '@/hooks/useSelectedTracks';
 import { TracksResponse, useTracks } from '@/hooks/useTracks';
 import { Track } from '@/types';
 
@@ -29,6 +30,9 @@ type AppContextType = {
     id: string;
     hasExistingAudio: boolean;
   }) => Promise<void>;
+  deleteSelectedTracks: (selectedIds: string[]) => Promise<void>;
+  selectedTracks: string[];
+  toggleTrackSelection: (trackId: string) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -44,8 +48,15 @@ export function AppProvider({
   const queryParams = Object.fromEntries(params.entries());
   const query = { ...queryParams, page: queryParams.page || '1' };
 
-  const { tracks, isLoading, error, addTrack, editTrack, deleteTrack } =
-    useTracks({ fallbackData, query });
+  const {
+    tracks,
+    isLoading,
+    error,
+    addTrack,
+    editTrack,
+    deleteTrack,
+    deleteSelectedTracks,
+  } = useTracks({ fallbackData, query });
 
   const {
     genres,
@@ -59,6 +70,8 @@ export function AppProvider({
   );
 
   const { deleteAudio, uploadAudio } = useAudio(query);
+
+  const { selectedTracks, toggleTrackSelection } = useSelectedTracks();
 
   const value = useMemo<AppContextType>(
     () => ({
@@ -74,6 +87,9 @@ export function AppProvider({
       deleteAudio,
       uploadAudio,
       genreList,
+      deleteSelectedTracks,
+      selectedTracks,
+      toggleTrackSelection,
     }),
     [
       tracks,
@@ -88,6 +104,9 @@ export function AppProvider({
       deleteAudio,
       uploadAudio,
       genreList,
+      deleteSelectedTracks,
+      selectedTracks,
+      toggleTrackSelection,
     ],
   );
 

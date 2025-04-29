@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 
+import clsx from 'clsx';
+
 import { Badge } from '../ui/badge';
 import DeleteModal from './DeleteModal';
 import EditTrackModal from './EditTrackModal';
@@ -20,11 +22,17 @@ import { Track } from '@/types';
 
 export default function TrackCard({ track }: { track: Track }) {
   const audioRef = useExclusiveAudio(new Date(track.updatedAt).getTime());
-  const { deleteTrack } = useAppContext();
+  const { deleteTrack, selectedTracks, toggleTrackSelection } = useAppContext();
   return (
     <Card
-      className="relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl"
+      className={clsx(
+        'relative flex h-full flex-col justify-between overflow-hidden pt-0 transition-colors hover:cursor-pointer hover:shadow-2xl',
+        selectedTracks.includes(track.id)
+          ? 'border-2 border-blue-400'
+          : 'border-2 border-transparent',
+      )}
       data-testid={`track-item-${track.id}`}
+      onClick={() => toggleTrackSelection(track.id)}
     >
       <div className="absolute top-5 right-5 flex gap-2">
         {track.genres.map((genre: string) => (
@@ -72,16 +80,19 @@ export default function TrackCard({ track }: { track: Track }) {
             Your browser does not support the audio element.
           </audio>
         )}
-        <div className="flex gap-2 self-end">
+        <div
+          className="flex gap-2 self-end"
+          onClick={(e) => e.stopPropagation()}
+        >
           <EditTrackModal track={track} />
           <UploadTrackModal track={track} />
           <DeleteModal
-            title="Delete Track"
-            track={track}
-            deleteFn={deleteTrack}
+            title="Delete track"
+            description={`Permanently delete track "${track.title}" by ${track.artist}?`}
+            deleteFn={() => deleteTrack(track.id)}
+            successMsg={`${track.title} deleted successfully!`}
+            buttonTestId={`delete-track-${track.id}`}
             errorMsg="Failed to delete track"
-            successMsg={`${track.title} by ${track.artist} was successfully deleted!`}
-            isTrack={true}
           />
         </div>
       </CardFooter>

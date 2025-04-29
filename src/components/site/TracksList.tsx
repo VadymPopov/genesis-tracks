@@ -1,16 +1,17 @@
 'use client';
 import React from 'react';
 
+import { Flyout } from './Flyout';
 import Loader from './Loader';
 import TrackCard from './TrackCard';
 
 import { useAppContext } from '@/providers';
 
 export default function TracksList() {
-  const { tracks, isLoading, error } = useAppContext();
+  const { tracks, isLoading, error, selectedTracks } = useAppContext();
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center">
+    <div className="flex min-h-screen w-full flex-col items-center justify-start">
       {isLoading && <Loader testid="loading-tracks" />}
       {error && <p className="text-center text-red-500">{error.message}</p>}
       {!isLoading && !error && !tracks?.data.length && (
@@ -25,6 +26,7 @@ export default function TracksList() {
           ))}
         </ul>
       )}
+      {selectedTracks.length > 0 && <Flyout />}
     </div>
   );
 }
