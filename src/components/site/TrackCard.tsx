@@ -16,17 +16,29 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useExclusiveAudio } from '@/hooks/useAudioPlayer';
+import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { useAppContext } from '@/providers';
 import { Track } from '@/types';
 
-export default function TrackCard({ track }: { track: Track }) {
+export default function TrackCard({
+  track,
+  onAudioReady,
+}: {
+  track: Track;
+  onAudioReady: (
+    audioRef: React.RefObject<HTMLAudioElement | null>,
+    title: string,
+  ) => void;
+}) {
   const genres = useMemo(() => track.genres, [track.genres]);
 
   const { id, title, artist, album, coverImage, audioFile, updatedAt } = track;
 
-  const audioRef = useExclusiveAudio(new Date(updatedAt!).getTime());
+  const audioRef = useAudioPlayer(new Date(updatedAt!).getTime());
   const { deleteTrack, selectedTracks, toggleTrackSelection } = useAppContext();
+
+  const audioUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/files/${audioFile}?updatedAt=${new Date(updatedAt!).getTime()}`;
+
   return (
     <Card
       className={clsx(
@@ -76,11 +88,9 @@ export default function TrackCard({ track }: { track: Track }) {
             className="w-full"
             ref={audioRef}
             data-testid={`audio-player-${id}`}
+            onPlay={() => onAudioReady(audioRef, title)}
           >
-            <source
-              src={`${process.env.NEXT_PUBLIC_API_URL}/api/files/${audioFile}?updatedAt=${new Date(updatedAt!).getTime()}`}
-              type="audio/mp3"
-            />
+            <source src={audioUrl} type="audio/mp3" />
             Your browser does not support the audio element.
           </audio>
         )}

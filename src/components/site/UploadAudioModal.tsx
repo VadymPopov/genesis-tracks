@@ -35,6 +35,8 @@ export default function UploadAudioModal({ track }: { track: Track }) {
     setIsOpen(open);
   };
 
+  const audioUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/files/${audioFile}?updatedAt=${new Date(updatedAt!).getTime()}`;
+
   return (
     <Dialog open={isOpen} onOpenChange={onDialogOpen}>
       <DialogTrigger asChild>
@@ -58,10 +60,7 @@ export default function UploadAudioModal({ track }: { track: Track }) {
 
             <div className="flex items-center gap-2">
               <audio controls>
-                <source
-                  src={`${process.env.NEXT_PUBLIC_API_URL}/api/files/${audioFile}?updatedAt=${new Date(updatedAt!).getTime()}`}
-                  type="audio/mp3"
-                />
+                <source src={audioUrl} type="audio/mp3" />
                 Your browser does not support the audio element.
               </audio>
 

@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 
 let currentlyPlaying: HTMLAudioElement | null = null;
 
-export function useExclusiveAudio(audioSrc?: number) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+export function useAudioPlayer(audioSrc?: number) {
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const audio = audioRef.current;

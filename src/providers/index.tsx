@@ -33,6 +33,8 @@ type AppContextType = {
   deleteSelectedTracks: (selectedIds: string[]) => Promise<void>;
   selectedTracks: string[];
   toggleTrackSelection: (trackId: string) => void;
+  selectAllTracks: (tracks: string[]) => void;
+  unselectAllTracks: () => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -71,7 +73,12 @@ export function AppProvider({
 
   const { deleteAudio, uploadAudio } = useAudio(query);
 
-  const { selectedTracks, toggleTrackSelection } = useSelectedTracks();
+  const {
+    selectedTracks,
+    toggleTrackSelection,
+    selectAllTracks,
+    unselectAllTracks,
+  } = useSelectedTracks();
 
   const value = useMemo<AppContextType>(
     () => ({
@@ -90,6 +97,8 @@ export function AppProvider({
       deleteSelectedTracks,
       selectedTracks,
       toggleTrackSelection,
+      selectAllTracks,
+      unselectAllTracks,
     }),
     [
       tracks,
@@ -107,6 +116,8 @@ export function AppProvider({
       deleteSelectedTracks,
       selectedTracks,
       toggleTrackSelection,
+      selectAllTracks,
+      unselectAllTracks,
     ],
   );
 

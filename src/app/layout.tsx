@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Music Tracks App',
+  title: 'SoundWaves',
   description: 'Created by Vadym Popov',
 };
 

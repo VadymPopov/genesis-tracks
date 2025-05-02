@@ -13,5 +13,18 @@ export const useSelectedTracks = () => {
     });
   };
 
-  return { selectedTracks, toggleTrackSelection };
+  const unselectAllTracks = () => {
+    setSelectedTracks([]);
+  };
+
+  const selectAllTracks = (tracks: string[]) => {
+    setSelectedTracks(tracks);
+  };
+
+  return {
+    selectedTracks,
+    toggleTrackSelection,
+    unselectAllTracks,
+    selectAllTracks,
+  };
 };

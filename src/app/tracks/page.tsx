@@ -30,7 +30,7 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
         <header className="row-start-1 flex items-center justify-center gap-5">
           <Image src="/logo.svg" alt="Audio Wave Icon" width={64} height={64} />
           <h1 data-testid="tracks-header" className="text-2xl font-semibold">
-            Music Tracks App
+            SoundWaves
           </h1>
         </header>
         <main className="row-start-2 flex w-full flex-col items-center gap-[32px] sm:items-start">

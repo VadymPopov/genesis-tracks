@@ -3,13 +3,30 @@
 import clsx from 'clsx';
 import { toast } from 'sonner';
 
+import { Button } from '../ui/button';
 import DeleteModal from './DeleteModal';
 
 import { useAppContext } from '@/providers';
 
 export function Flyout() {
-  const { selectedTracks, deleteSelectedTracks } = useAppContext();
+  const {
+    selectedTracks,
+    deleteSelectedTracks,
+    selectAllTracks,
+    unselectAllTracks,
+    tracks,
+  } = useAppContext();
   const message = `${selectedTracks.length} track${selectedTracks.length !== 1 ? 's' : ''} selected`;
+
+  const handleSelectAll = () => {
+    if (selectedTracks.length === tracks.data.length) {
+      unselectAllTracks();
+      toast.success('All tracks were unselected!');
+    } else {
+      selectAllTracks(tracks.data.map((track) => track.id));
+      toast.success('All tracks were selected!');
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -35,7 +52,15 @@ export function Flyout() {
       <p className="font-semibold text-white md:text-lg xl:text-xl">
         {message}
       </p>
-      <div className="flex gap-2.5">
+      <div className="flex gap-4">
+        {tracks.data.length > 1 && (
+          <Button onClick={handleSelectAll} variant={'secondary'}>
+            {selectedTracks.length === tracks.data.length
+              ? 'Unselect All'
+              : 'Select All'}
+          </Button>
+        )}
+
         {selectedTracks.length > 0 && (
           <DeleteModal
             title="Delete multiple tracks"

@@ -39,15 +39,21 @@ export default function CreateTrackForm({
       artist: '',
       album: '',
       genres: [],
-      coverImage: 'https://www.picsum.photos/id/237/200/300',
+      coverImage: '',
     },
   });
 
   async function onSubmit(values: z.infer<typeof CreateTrackFormSchema>) {
     setIsSubmitting(true);
 
+    const newTrack = {
+      ...values,
+      coverImage:
+        values.coverImage || 'https://www.picsum.photos/id/237/200/300',
+    };
+
     try {
-      await addTrack(values);
+      await addTrack(newTrack);
       form.reset();
       onDialogClose();
       toast.success(`${values.title} by ${values.artist} added successfully!`);
