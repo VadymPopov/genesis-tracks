@@ -162,6 +162,7 @@ export function useTracks({
       });
 
       await postFetcher(tracksApiUrl, { ids });
+      mutate();
     } catch (error) {
       console.error(
         'Error deleting selected tracks:',

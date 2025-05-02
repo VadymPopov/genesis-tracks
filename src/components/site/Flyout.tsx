@@ -17,6 +17,7 @@ export function Flyout() {
     tracks,
   } = useAppContext();
   const message = `${selectedTracks.length} track${selectedTracks.length !== 1 ? 's' : ''} selected`;
+  console.log(selectedTracks);
 
   const handleSelectAll = () => {
     if (selectedTracks.length === tracks.data.length) {
@@ -31,6 +32,7 @@ export function Flyout() {
   const handleDelete = async () => {
     try {
       await deleteSelectedTracks(selectedTracks);
+      unselectAllTracks();
       toast.success(`Selected tracks were deleted successfully!`);
     } catch (error) {
       console.log(error);
