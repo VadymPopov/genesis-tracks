@@ -1,13 +1,7 @@
 import * as React from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import {
-  CheckIcon,
-  ChevronDown,
-  CirclePlus,
-  XCircle,
-  XIcon,
-} from 'lucide-react';
+import { CheckIcon, CirclePlus, XCircle, XIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -79,7 +73,6 @@ export const MultiSelect = React.forwardRef<
       placeholder = 'Select options',
       maxCount = 3,
       modalPopover = false,
-      asChild = false,
       className,
       ...props
     },
@@ -141,7 +134,7 @@ export const MultiSelect = React.forwardRef<
         onOpenChange={setIsPopoverOpen}
         modal={modalPopover}
       >
-        <PopoverTrigger asChild>
+        <PopoverTrigger>
           <Button
             ref={ref}
             {...props}
