@@ -38,7 +38,7 @@
 
 ## 🌐 Live Demo
 
-[🔗 View Live App](https://your-live-demo-link.com)
+[🔗 View Live App](https://genesis-tracks.vercel.app/tracks)
 
 ## 🧰 Installation & Setup
 
