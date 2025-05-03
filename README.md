@@ -33,10 +33,8 @@
 
 ## 📸 Screenshots
 
-![Track List](![screenshot_main](https://github.com/user-attachments/assets/a0f63db8-f17e-4278-8b5c-4ec4cd5dea92)
-)
-![Edit Modal](![screenshot_edit](https://github.com/user-attachments/assets/d5642f50-356b-4519-a65b-d631b86844a7)
-)
+![Track List](https://github.com/user-attachments/assets/a0f63db8-f17e-4278-8b5c-4ec4cd5dea92)
+![Edit Modal](https://github.com/user-attachments/assets/d5642f50-356b-4519-a65b-d631b86844a7)
 
 ## 🌐 Live Demo
 
