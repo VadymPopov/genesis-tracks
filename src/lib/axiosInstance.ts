@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+const baseURL =
+  typeof window === 'undefined'
+    ? process.env.API_URL
+    : process.env.NEXT_PUBLIC_API_URL;
+
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL,
 });
 
 axiosInstance.interceptors.response.use(
